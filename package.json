@@ -1,0 +1,48 @@
+{
+  "name": "match-service",
+  "version": "1.0.0",
+  "description": "IMT A1 - Micro services architecture",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run build && npm run serve",
+    "serve": "node -r dotenv/config dist/server.js",
+    "build": "npm run clean && npm run build-ts",
+    "build-ts": "tsc",
+    "watch": "npx concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
+    "watch-node": "nodemon -r dotenv/config dist/server.js",
+    "watch-ts": "tsc -w",
+    "clean": "rimraf ./dist",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mikro-orm/cli": "^6.4.3",
+    "@mikro-orm/core": "^6.4.3",
+    "@mikro-orm/postgresql": "^6.4.3",
+    "@mikro-orm/reflection": "^6.4.3",
+    "@mikro-orm/sqlite": "^6.4.3",
+    "@types/node": "^22.10.7",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "match-service": "file:",
+    "node-cron": "^3.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts"
+    ]
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node-cron": "^3.0.11",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9"
+  }
+}

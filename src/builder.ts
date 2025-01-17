@@ -1,7 +1,10 @@
+import swaggerJSDoc from 'swagger-jsdoc';
 import express, { Express } from 'express';
 import { ServerApplication } from './server';
 import bodyParser from 'body-parser';
 import { initializeDatabaseConnection } from './configuration/database';
+import { options } from './swagger';
+import swaggerUI from 'swagger-ui-express';
 
 export default class Builder {
 
@@ -10,6 +13,11 @@ export default class Builder {
     configureExpress = () => {
         this.app.use(bodyParser.json());
         return this;
+    }
+
+    configureSwagger = () => {
+        const swaggerSpec = swaggerJSDoc(options);
+        this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
     }
 
     configureDatabase = async () => {
@@ -27,6 +35,7 @@ export default class Builder {
         await this.configureDatabase();
         this.configureExpress();
         this.configureRoutes();
+        this.configureSwagger();
         return new ServerApplication(this.app, port);
     }
 }

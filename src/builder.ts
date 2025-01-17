@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import { initializeDatabaseConnection } from './configuration/database';
 import { options } from './swagger';
 import swaggerUI from 'swagger-ui-express';
+import { Router } from './presentation';
 
 export default class Builder {
 
@@ -28,6 +29,7 @@ export default class Builder {
     }
 
     configureRoutes = () => {
+        this.app.use('/api', Router);
         return this;
     }
 

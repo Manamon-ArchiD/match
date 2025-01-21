@@ -15,7 +15,7 @@ router.use('/status', (req, res) => {
 
 /**
  * @swagger
- * /api/match/:
+ * /api/match:
  *   get:
  *     summary: Get all matches
  *     tags:
@@ -30,7 +30,7 @@ router.use('/status', (req, res) => {
  *               items:
  *                 $ref: '#/components/schemas/Match'
  */
-router.get('/', MatchController.getAll);
+router.get('', MatchController.getAll);
 
 router.use(express.urlencoded({ extended: false }))
 export default router;

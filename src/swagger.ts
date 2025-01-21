@@ -2,7 +2,7 @@ export const options = {
     definition: {
         openapi: "3.1.0",
         info: {
-          title: "Swagger API pour le match service",
+          title: "Swagger API - Match service",
           version: "1.0.0",
         },
         schemes: ["http", "https"],
@@ -14,9 +14,9 @@ export const options = {
         "application/json"
     ],
     apis: [
-        `./src/routes/*.ts`,
-        "./dist/src/routes/*.js",
+        `./src/presentation/routes/**/*.ts`,
+        "./dist/presentation/routes/**/*.js",
         `./src/models/*.ts`,
-        "./dist/src/models/*.js"
+        "./dist/models/*.js"
     ],
 };

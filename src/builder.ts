@@ -6,6 +6,10 @@ import { initializeDatabaseConnection } from './configuration/database';
 import { options } from './swagger';
 import swaggerUI from 'swagger-ui-express';
 import { Router } from './presentation';
+import { repositories } from './presentation/repositories';
+import { MikroORM } from '@mikro-orm/postgresql';
+import { MatchService } from './presentation/services';
+import { MatchController } from './presentation/controllers';
 
 export default class Builder {
 
@@ -25,6 +29,14 @@ export default class Builder {
         const orm = await initializeDatabaseConnection(process.env)
         const generator = orm.getSchemaGenerator();
         await generator.updateSchema();
+        this.configureDependencies(orm);
+        return this;
+    }
+
+    configureDependencies = (orm : MikroORM) => {
+        const matchRepository = new repositories.MatchRepository(orm.em.fork());
+        const matchService = new MatchService(matchRepository);
+        MatchController.service = matchService; 
         return this;
     }
 

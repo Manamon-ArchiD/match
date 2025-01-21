@@ -1,0 +1,1 @@
+export { MatchRepository } from './match';

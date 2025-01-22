@@ -1,3 +1,4 @@
+import { MatchLimitExceededError } from "../../../presentation/errors";
 import { Match } from "../../../models/match.entity";
 import { repositories } from "../../repositories";
 
@@ -13,7 +14,11 @@ export default class MatchService {
     }
 
     async getUserMatches(userId : number) : Promise<Match[]> {
-        return await this.repository.getUserMatches(userId);
+        const matches = await this.repository.getUserMatches(userId);
+        if (matches.length > 3) {
+            throw new MatchLimitExceededError();
+        }
+        return matches;
     }
 
     async deleteMatch(id : number) : Promise<void> {

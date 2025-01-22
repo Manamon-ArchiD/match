@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { MatchService } from "../../services";
+import { MatchLimitExceededError } from "../../errors";
 
 export default class MatchController {
 
@@ -22,7 +23,12 @@ export default class MatchController {
                 res.status(200).json(matches);
             }   
         } catch (error) {
-            res.status(500).json(error);
+            if (error instanceof MatchLimitExceededError) {
+                res.status(400).json({ message: "Match limit exceeded" });
+            }
+            else {
+                res.status(500).json(error);
+            }
         }
     }
 

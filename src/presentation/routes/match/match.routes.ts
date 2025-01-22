@@ -32,5 +32,8 @@ router.use('/status', (req, res) => {
  */
 router.get('', MatchController.getAll);
 
+
+router.get('/user', MatchController.getUserMatches)
+
 router.use(express.urlencoded({ extended: false }))
 export default router;

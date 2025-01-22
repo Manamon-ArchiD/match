@@ -13,4 +13,16 @@ export default class MatchController {
             res.status(500).json(error);
         }
     }
+
+    static getUserMatches = async (req: Request, res: Response) : Promise<void> => {
+        try {
+            const userId = parseInt(req.query.userId as string);
+            if (userId) {
+                const matches = await this.service.getUserMatches(userId);
+                res.status(200).json(matches);
+            }   
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
 }

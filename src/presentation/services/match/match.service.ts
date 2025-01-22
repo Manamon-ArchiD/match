@@ -11,4 +11,8 @@ export default class MatchService {
     async getAll() : Promise<Match[]> {
         return await this.repository.getAll();
     }
+
+    async getUserMatches(userId : number) : Promise<Match[]> {
+        return await this.repository.getUserMatches(userId);
+    }
 };

@@ -13,4 +13,8 @@ export default class MatchRepository {
         return matches;
     }
 
+    getUserMatches = async (userId: number): Promise<Match[]> => {
+        const matches = await this.em.find(Match, { userId: userId });
+        return matches;
+    }
 }

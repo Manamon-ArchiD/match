@@ -6,7 +6,8 @@ export class TestSeeder extends Seeder {
 
   async run(em: EntityManager): Promise<void> {
     em.create(Match, {
-      id: 1
+      id: 1,
+      userId: 1
     })
   }
 

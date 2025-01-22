@@ -1,6 +1,5 @@
 import { Express } from "express"
-import Builder from "./builder";
-
+import { Builder } from "./builder";
 
 export class ServerApplication {
     constructor(private app: Express, private port: Number) { }
@@ -11,12 +10,3 @@ export class ServerApplication {
         })
     }
 }
-
-const init = async () => {
-    const port = parseInt(process.env.PORT);
-    const builder = new Builder();
-    const serverApp = await builder.build(port || 3000);
-    serverApp.start();
-};
-
-init();

@@ -18,11 +18,11 @@
         "emitDecoratorMetadata": true
     },
     "include": [
-        "src/**/*",
-        "src/mikro-orm.config.ts"
-    ],
+        "src/**/*"],
     "exclude": [
-        "node_modules/"
+        "node_modules/",
+        "tests/",
+        "dist/"
     ],
     // "ts-node": {
     //     "esm": true,

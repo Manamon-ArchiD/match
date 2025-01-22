@@ -1,20 +1,31 @@
 import { MikroORM } from "@mikro-orm/postgresql";
+import mikroOrmConfig from './mikro-orm.config';
 import { db } from "../models";
+import { SeedManager } from "@mikro-orm/seeder";
+import { defineConfig } from "@mikro-orm/sqlite";
 
-export const initializeDatabaseConnection = async (environment: NodeJS.ProcessEnv) => {
+export const initializeDatabaseConnection = async (
+    environment: NodeJS.ProcessEnv,
+    useMemoryDB : boolean = false
+) => {
     try {
+        if (useMemoryDB) {
+            console.log("🐘 Initializing Memory Database...");
 
-        const orm = await MikroORM.init({
-            host: environment.DB_HOST,
-            port: parseInt(environment.DB_PORT),
-            dbName: environment.DB_NAME,
-            user: environment.DB_USER,
-            password: environment.DB_PASSWORD,
-            entities: [db.match]
-        });
+            return MikroORM.init(
+                defineConfig({
+                    dbName: ':memory:',
+                    entities: [db.match],
+                    extensions: [SeedManager],
+                })
+            );
+        } else {
+            console.log("🐘 Initializing PostgreSQL Database...");
 
-        console.log("🐘 Database successfully connected");
-        return orm;
+            return await MikroORM.init({
+                ...mikroOrmConfig,
+            });
+        }
     } catch (error) {
         console.log(error);
         throw new Error("Database connection error.");

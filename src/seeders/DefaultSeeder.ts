@@ -5,6 +5,13 @@ import { Match } from '../models/match.entity';
 export class DefaultSeeder extends Seeder {
 
   async run(em: EntityManager): Promise<void> {
+
+    const existingMatch = await em.findOne(Match, {id:1});
+    if (existingMatch) {
+      console.log('Data already exists. Skipping seeding.');
+      return;
+    }
+    
     em.create(Match, {
       id: 1
     })
@@ -20,6 +27,8 @@ export class DefaultSeeder extends Seeder {
     em.create(Match, {
       id: 5
     })
+    console.log("Data seeded successfully");
+
   }
 
 }

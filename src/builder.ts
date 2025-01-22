@@ -12,6 +12,7 @@ import { MatchService } from './presentation/services';
 import { MatchController } from './presentation/controllers';
 import { MikroORM as sqliteMikroORM } from '@mikro-orm/sqlite';
 import { TestSeeder } from './seeders/TestSeeder';
+import { DefaultSeeder } from './seeders/DefaultSeeder';
 
 export class Builder {
     private orm! : pgMikroORM | sqliteMikroORM;
@@ -34,6 +35,8 @@ export class Builder {
         await generator.updateSchema()
         if (useMemoryDB) {
             await this.orm.seeder.seed(TestSeeder);
+        } else {
+            await this.orm.seeder.seed(DefaultSeeder)
         }
         this.configureDependencies(this.orm);
         return this;

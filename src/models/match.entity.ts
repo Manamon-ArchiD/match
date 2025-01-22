@@ -15,7 +15,7 @@ export class Match extends BaseEntity {
  *       type: object
  *       properties:
  *         id:
- *           type: string
+ *           type: number
  *           description: Unique identifier for the match
  *         userId:
  *           type: number
@@ -23,5 +23,6 @@ export class Match extends BaseEntity {
  *       required:
  *         - id
  *       example:
- *         id: "12345"
+ *          id: 1
+ *          userId: 1
  */

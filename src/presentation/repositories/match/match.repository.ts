@@ -17,4 +17,9 @@ export default class MatchRepository {
         const matches = await this.em.find(Match, { userId: userId });
         return matches;
     }
+
+    deleteMatch = async (id: number): Promise<void> => {
+        const match = await this.em.findOneOrFail(Match, id);
+        await this.em.removeAndFlush(match);
+    }
 }

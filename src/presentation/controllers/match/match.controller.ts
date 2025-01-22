@@ -25,4 +25,16 @@ export default class MatchController {
             res.status(500).json(error);
         }
     }
+
+    static deleteMatch = async (req: Request, res: Response) : Promise<void> => {
+        try {
+            const id = parseInt(req.params.id);
+            if (id) {
+                await this.service.deleteMatch(id);
+                res.status(200).json({ message: "Match deleted" });
+            }   
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
 }

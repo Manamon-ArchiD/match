@@ -15,4 +15,8 @@ export default class MatchService {
     async getUserMatches(userId : number) : Promise<Match[]> {
         return await this.repository.getUserMatches(userId);
     }
+
+    async deleteMatch(id : number) : Promise<void> {
+        await this.repository.deleteMatch(id);
+    }
 };

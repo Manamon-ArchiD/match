@@ -6,8 +6,8 @@ export class DefaultSeeder extends Seeder {
 
   async run(em: EntityManager): Promise<void> {
 
-    const existingMatch = await em.findOne(Match, {id:1});
-    if (existingMatch) {
+    const existingMatches = await em.find(Match, {});
+    if (existingMatches.length > 0) {
       console.log('Data already exists. Skipping seeding.');
       return;
     }

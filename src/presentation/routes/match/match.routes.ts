@@ -52,7 +52,7 @@ router.get('', MatchController.getAll);
  *       404:
  *         description: Match not found
  */
-router.get('/:id', MatchController.getAll) // TODO
+router.get('/:id', MatchController.getOne)
 
 /**
  * @swagger
@@ -104,7 +104,7 @@ router.put('/:id', MatchController.getAll) // TODO
  *               type: object
  *               $ref: '#/components/schemas/Match'
  */
-router.post('', MatchController.getAll); // TODO
+router.post('', MatchController.createOne);
 
 /**
  * @swagger

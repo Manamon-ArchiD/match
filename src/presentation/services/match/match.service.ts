@@ -13,6 +13,10 @@ export default class MatchService {
         return await this.repository.getAll();
     }
 
+    async getOne(id: number) : Promise<Match | null> {
+        return this.repository.getOne(id);
+    }
+
     async getUserMatches(userId : number) : Promise<Match[]> {
         const matches = await this.repository.getUserMatches(userId);
         if (matches.length > 3) {
@@ -23,5 +27,9 @@ export default class MatchService {
 
     async deleteMatch(id : number) : Promise<void> {
         await this.repository.deleteMatch(id);
+    }
+
+    createOne() : Promise<Match> {
+        throw new Error("Method not implemented.");
     }
 };

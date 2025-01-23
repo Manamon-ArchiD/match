@@ -13,6 +13,11 @@ export default class MatchRepository {
         return matches;
     }
 
+    async getOne(id: number) : Promise<Match | null> {
+        const match = await this.em.findOne(Match, {id: id});
+        return match;
+    }
+
     getUserMatches = async (userId: number): Promise<Match[]> => {
         const matches = await this.em.find(Match, { userId: userId });
         return matches;

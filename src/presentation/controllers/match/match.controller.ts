@@ -46,4 +46,32 @@ export default class MatchController {
             ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
         }
     }
+
+    static getOne = async (req: Request, res: Response) : Promise<void> => {
+        const id = parseInt(req.params.id);
+        if (id) {
+            try {
+                const match = await this.service.getOne(id);
+                if (match) {
+                    ResponseHelper.send(res, StatusCodes.OK, messages.match.getOne, match);
+                }
+                else {
+                    ResponseHelper.send(res, StatusCodes.NOT_FOUND, messages.match.matchNotFound)
+                }
+
+            } catch (error) {
+                ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
+            }
+        }
+    }
+
+
+    static createOne = async (req: Request, res: Response) : Promise<void> => {
+        try {
+            const match = await this.service.createOne()
+            ResponseHelper.send(res, StatusCodes.OK, messages.match.matchCreated, match);
+        } catch (error) {
+            ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
+        }
+    } 
 }

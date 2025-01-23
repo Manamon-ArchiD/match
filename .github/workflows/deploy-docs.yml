@@ -31,7 +31,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.6.0' # Remplacez par la version compatible avec votre projet
+          node-version: '20.6.0'
 
       - name: Install dependencies
         run: npm install

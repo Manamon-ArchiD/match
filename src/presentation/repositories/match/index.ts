@@ -1,0 +1,1 @@
+export { default as MatchRepository } from './match.repository';

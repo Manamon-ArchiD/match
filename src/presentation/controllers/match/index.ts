@@ -1,0 +1,1 @@
+export { default as MatchController } from './match.controller';

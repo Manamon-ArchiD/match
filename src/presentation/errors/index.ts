@@ -1,0 +1,1 @@
+export { MatchLimitExceededError } from './match.errors';

@@ -1,0 +1,1 @@
+export { default as MatchRouter } from './match.routes';

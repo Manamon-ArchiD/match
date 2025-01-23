@@ -1,0 +1,13 @@
+{
+    "match": {
+        "getAll": "Matches retrieved",
+        "userMatches": "User matches retrieved",
+        "matchDeleted": "Match deleted",
+        "matchLimitExceeded": "Match limit exceeded"
+    },
+
+    "defaults" : {
+        "badRequest": "Bad Request",
+        "serverError": "Internal Server Error"
+    }
+}

@@ -1,5 +1,5 @@
 # match-service
-IMT A1 - Micro services architecture
+IMT A1 - Micro services architecture - Anthony ELUECQUE & Alexis YON
 
 # Domaine Combat
 ## Service Match
@@ -7,8 +7,8 @@ IMT A1 - Micro services architecture
 - Informations sur les matchs (état, participants, dates, scores, vainqueur)
 - Invitations et participation aux matchs
 ### Technologies :
-- Java avec Spring Boot
-- Stockage : PostgreSQL
+- TS
+- MikroORM & PostgreSQL
 - Envoie des statistiques via un bus de messages RabbitMQ
 ### Principales fonctionnalités :
 

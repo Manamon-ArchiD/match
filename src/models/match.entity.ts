@@ -47,11 +47,48 @@ export class Match extends BaseEntity {
  *           items:
  *             type: number
  *           description: List of user IDs associated with the match
+ *         winnerId:
+ *           type: number
+ *           nullable: true
+ *           description: The ID of the winner if the match is finished
+ *         pendingInvitations:
+ *           type: array
+ *           items:
+ *             type: number
+ *           description: List of user IDs who have pending invitations to join the match
+ *         isPublic:
+ *           type: boolean
+ *           description: Indicates if the match is public
+ *         status:
+ *           type: string
+ *           enum:
+ *             - CREATED
+ *             - PENDING
+ *             - ENDED
+ *           description: The current status of the match
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: The date and time when the match was created
+ *         finishedAt:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           description: The date and time when the match finished, if applicable
  *       required:
  *         - id
  *         - userIds
+ *         - isPublic
+ *         - status
+ *         - createdAt
  *       example:
- *          id: 1
- *          userIds: [1, 2, 3]
+ *         id: 1
+ *         userIds: [1, 2, 3]
+ *         winnerId: 2
+ *         pendingInvitations: [4]
+ *         isPublic: true
+ *         status: "PENDING"
+ *         createdAt: "2025-01-24T12:00:00Z"
+ *         finishedAt: "2025-01-25T14:30:00Z"
  */
 

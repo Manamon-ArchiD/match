@@ -14,23 +14,23 @@ export class DefaultSeeder extends Seeder {
     
     em.create(Match, {
       id: 1,
-      userId: 1
+      userIds: [1,2]
     })
     em.create(Match, {
       id: 2,
-      userId: 1
+      userIds: [1,3]
     })
     em.create(Match, {
       id: 3,
-      userId: 3
+      userIds: [3,1]
     })
     em.create(Match, {
       id: 4,
-      userId: 4
+      userIds: [4,5]
     })
     em.create(Match, {
       id: 5,
-      userId:2
+      userIds: [5,6]
     })
     console.log("Data seeded successfully");
 

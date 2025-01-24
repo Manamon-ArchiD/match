@@ -17,7 +17,6 @@ describe('Database Test', () => {
         .configureRoutes();
         request = supertest(builder.App);
         orm = builder.Orm as MikroORM;
-        console.log("===== Database Test =====");
     });
 
     afterAll(async () => {

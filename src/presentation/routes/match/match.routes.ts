@@ -13,98 +13,6 @@ router.use('/status', (req, res) => {
     res.status(200).json({ status: 'OK' });
 });
 
-/**
- * @swagger
- * /api/match:
- *   get:
- *     summary: Get all matches
- *     tags:
- *       - Match
- *     responses:
- *       200:
- *         description: List of matches
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Match'
- */
-router.get('', MatchController.getAll);
-
-/**
- * @swagger
- * /api/match/{id}:
- *   get:
- *     summary: Get a match
- *     tags:
- *       - Match
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The match ID
- *     responses:
- *       200:
- *         description: Match found
- *       404:
- *         description: Match not found
- */
-router.get('/:id', MatchController.getAll) // TODO
-
-/**
- * @swagger
- * /api/match/{id}:
- *   put:
- *     summary: Update a match
- *     tags:
- *       - Match
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The match ID
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             $ref: '#/components/schemas/Match'
- *     responses:
- *       200:
- *         description: Match updated successfully
- *       404:
- *         description: Match not found
- */
-router.put('/:id', MatchController.getAll) // TODO
-
-/**
- * @swagger
- * /api/match:
- *   post:
- *     summary: Add given match
- *     tags:
- *       - Match
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             $ref: '#/components/schemas/Match'
- *     responses:
- *       201:
- *         description: The match was successfully created
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               $ref: '#/components/schemas/Match'
- */
-router.post('', MatchController.getAll); // TODO
 
 /**
  * @swagger
@@ -134,6 +42,82 @@ router.get('/user', MatchController.getUserMatches)
 
 /**
  * @swagger
+ * /api/match:
+ *   get:
+ *     summary: Get all matches
+ *     tags:
+ *       - Match
+ *     responses:
+ *       200:
+ *         description: List of matches
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Match'
+ */
+router.get('', MatchController.getAll);
+
+
+
+/**
+ * @swagger
+ * /api/match/{id}:
+ *   get:
+ *     summary: Get a match
+ *     tags:
+ *       - Match
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The match ID
+ *     responses:
+ *       200:
+ *         description: Match found
+ *       404:
+ *         description: Match not found
+ */
+router.get('/:id', MatchController.getOne)
+
+/**
+ * @swagger
+ * /api/match/{id}:
+ *   put:
+ *     summary: Update a match
+ *     tags:
+ *       - Match
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The match ID
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             $ref: '#/components/schemas/UpdateMatchDto'
+ *     responses:
+ *       200:
+ *         description: Match updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/Match'
+ *       404:
+ *         description: Match not found
+ */
+router.put('/:id', MatchController.updateOne)
+
+/**
+ * @swagger
  * /api/match/{id}:
  *   delete:
  *     summary: Delete a match
@@ -153,6 +137,30 @@ router.get('/user', MatchController.getUserMatches)
  *         description: Match not found
  */
 router.delete('/:id', MatchController.deleteMatch)
+
+/**
+ * @swagger
+ * /api/match:
+ *   post:
+ *     summary: Add given match
+ *     tags:
+ *       - Match
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             $ref: '#/components/schemas/NewMatchDto'
+ *     responses:
+ *       201:
+ *         description: The match was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/Match'
+ */
+router.post('', MatchController.createOne);
 
 /**
  * @swagger

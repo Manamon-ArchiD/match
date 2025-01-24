@@ -2,8 +2,11 @@ import { Request, Response } from "express";
 import { MatchService } from "../../services";
 import { MatchLimitExceededError } from "../../errors";
 import { ResponseHelper } from "../../helpers";
-import { StatusCodes } from "../../enums";
+import { MatchStatus, StatusCodes } from "../../enums";
 import messages from "../../docs/messages.json";
+import { NewMatchDto } from "../../dto/new-match.dto";
+import { UpdateMatchDto } from "../../dto/update-match.dto";
+import { MatchNotFoundError } from "../../errors/match.errors";
 
 export default class MatchController {
 
@@ -43,6 +46,58 @@ export default class MatchController {
                 ResponseHelper.send(res, StatusCodes.OK, messages.match.matchDeleted);
             }   
         } catch (error) {
+            ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
+        }
+    }
+
+    static getOne = async (req: Request, res: Response) : Promise<void> => {
+        const id = parseInt(req.params.id);
+        if (id) {
+            try {
+                const match = await this.service.getOne(id);
+                if (match) {
+                    ResponseHelper.send(res, StatusCodes.OK, messages.match.getOne, match);
+                }
+                else {
+                    ResponseHelper.send(res, StatusCodes.NOT_FOUND, messages.match.matchNotFound)
+                }
+
+            } catch (error) {
+                ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
+            }
+        }
+    }
+
+
+    static createOne = async (req: Request, res: Response) : Promise<void> => {
+        const data = req.body as NewMatchDto;
+        try {
+            const match = await this.service.createOne(data);
+            ResponseHelper.send(res, StatusCodes.OK, messages.match.matchCreated, match);
+        } catch (error) {
+            console.error(error);
+            ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
+        }
+    }
+
+    static updateOne = async (req: Request, res: Response) : Promise<void> => {
+        const id = parseInt(req.params.id);
+        if (Number.isNaN(id)){
+            ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.badRequest)
+        }
+        const data = req.body as UpdateMatchDto;
+        if (!Object.values(MatchStatus).includes(data.status)){
+            ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.badStatusUpdate)
+        }
+        
+        try {
+            const match = await this.service.updateOne(id, data);
+            ResponseHelper.send(res, StatusCodes.OK, messages.match.matchCreated, match);
+        } catch (error) {
+            if (error instanceof MatchNotFoundError) {
+                ResponseHelper.send(res, StatusCodes.NOT_FOUND, messages.match.matchNotFound);
+            }
+            console.error(error);
             ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
         }
     }

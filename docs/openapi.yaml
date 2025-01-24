@@ -6,20 +6,6 @@ schemes:
   - http
   - https
 paths:
-  /api/match:
-    get:
-      summary: Get all matches
-      tags:
-        - Match
-      responses:
-        '200':
-          description: List of matches
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Match'
   /api/match/user:
     get:
       summary: Get matches for a user
@@ -41,7 +27,82 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Match'
+  /api/match:
+    get:
+      summary: Get all matches
+      tags:
+        - Match
+      responses:
+        '200':
+          description: List of matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Match'
+    post:
+      summary: Add given match
+      tags:
+        - Match
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/NewMatchDto'
+      responses:
+        '201':
+          description: The match was successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Match'
   /api/match/{id}:
+    get:
+      summary: Get a match
+      tags:
+        - Match
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The match ID
+      responses:
+        '200':
+          description: Match found
+        '404':
+          description: Match not found
+    put:
+      summary: Update a match
+      tags:
+        - Match
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The match ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/UpdateMatchDto'
+      responses:
+        '200':
+          description: Match updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Match'
+        '404':
+          description: Match not found
     delete:
       summary: Delete a match
       tags:
@@ -58,6 +119,60 @@ paths:
           description: Match deleted
         '404':
           description: Match not found
+  /api/match/:matchId/invite:
+    post:
+      summary: Invite given players to a match using their ID
+      tags:
+        - Match
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        '200':
+          description: Users successfully invited
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Match'
+  /api/match/:matchId/accept:
+    post:
+      summary: Accept the invitation to the match in path
+      tags:
+        - Match
+      responses:
+        '200':
+          description: Invitation accepted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Match'
+  /api/match/:matchId/decline:
+    post:
+      summary: Decline the invitation to the match in path
+      tags:
+        - Match
+      responses:
+        '204':
+          description: Invitation declined successfully
+  /api/match/:matchId/join:
+    post:
+      summary: Join the public match given in path
+      tags:
+        - Match
+      responses:
+        '200':
+          description: Match successfully joined
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Match'
 components:
   schemas:
     Match:
@@ -66,14 +181,81 @@ components:
         id:
           type: number
           description: Unique identifier for the match
-        userId:
+        userIds:
+          type: array
+          items:
+            type: number
+          description: List of user IDs associated with the match
+        winnerId:
           type: number
-          description: User Id of the match
+          nullable: true
+          description: The ID of the winner if the match is finished
+        pendingInvitations:
+          type: array
+          items:
+            type: number
+          description: List of user IDs who have pending invitations to join the match
+        isPublic:
+          type: boolean
+          description: Indicates if the match is public
+        status:
+          type: string
+          enum:
+            - CREATED
+            - PENDING
+            - ENDED
+          description: The current status of the match
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time when the match was created
+        finishedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: The date and time when the match finished, if applicable
       required:
         - id
+        - userIds
+        - isPublic
+        - status
+        - createdAt
       example:
         id: 1
-        userId: 1
+        userIds:
+          - 1
+          - 2
+          - 3
+        winnerId: 2
+        pendingInvitations:
+          - 4
+        isPublic: true
+        status: PENDING
+        createdAt: '2025-01-24T12:00:00Z'
+        finishedAt: '2025-01-25T14:30:00Z'
+    NewMatchDto:
+      type: object
+      properties:
+        invitations:
+          type: array
+          items:
+            type: number
+          description: List of user IDs to invite
+        public:
+          type: boolean
+          description: Indicates if the match should be public
+        userId:
+          type: number
+          description: The current user's ID
+    UpdateMatchDto:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - CREATED
+            - PENDING
+            - ENDED
 tags:
   - name: Match
     description: Opérations sur les matchs

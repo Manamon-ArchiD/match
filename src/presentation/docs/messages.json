@@ -1,9 +1,13 @@
 {
     "match": {
         "getAll": "Matches retrieved",
+        "getOne": "Match retrieved",
         "userMatches": "User matches retrieved",
         "matchDeleted": "Match deleted",
-        "matchLimitExceeded": "Match limit exceeded"
+        "matchLimitExceeded": "Match limit exceeded",
+        "matchNotFound": "No match found for this id",
+        "matchCreated": "The match was successfully created",
+        "badStatusUpdate": "The new status should be a valid value"
     },
 
     "defaults" : {

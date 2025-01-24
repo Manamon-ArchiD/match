@@ -15,45 +15,45 @@ export class DefaultSeeder extends Seeder {
     
     em.create(Match, {
       id: 1,
-      userIds: [1,2],
+      userIds: JSON.stringify(["1","2"]),
       isPublic: false,
-      pendingInvitations: [],
+      pendingInvitations: JSON.stringify([]),
       status: MatchStatus.CREATED,
       createdAt: new Date()
     })
     em.create(Match, {
       id: 2,
-      userIds: [1,3],
+      userIds: JSON.stringify(["1","3"]),
       isPublic: false,
-      pendingInvitations: [],
+      pendingInvitations: JSON.stringify([]),
       status: MatchStatus.CREATED,
       createdAt: new Date()
     })
     em.create(Match, {
       id: 3,
-      userIds: [3,1],
+      userIds: JSON.stringify(["3","1"]),
       isPublic: false,
-      pendingInvitations: [],
+      pendingInvitations: JSON.stringify([]),
       status: MatchStatus.PENDING,
       createdAt: new Date()
     })
     em.create(Match, {
       id: 4,
-      userIds: [4,5],
+      userIds: JSON.stringify(["4","5"]),
       isPublic: false,
-      pendingInvitations: [],
+      pendingInvitations: JSON.stringify([]),
       status: MatchStatus.PENDING,
       createdAt: new Date()
     })
     em.create(Match, {
       id: 5,
-      userIds: [5,6],
+      userIds: JSON.stringify(["5","6"]),
       isPublic: true,
-      pendingInvitations: [],
+      pendingInvitations: JSON.stringify([]),
       status: MatchStatus.ENDED,
       createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
       finishedAt: new Date(),
-      winnerId: 5
+      winnerId: "5"
     })
     console.log("Data seeded successfully");
 

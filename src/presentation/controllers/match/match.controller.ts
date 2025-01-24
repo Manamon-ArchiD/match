@@ -49,7 +49,7 @@ export default class MatchController {
 
     static invite = async (req: Request, res: Response) : Promise<void> => {
         try {
-            const userId = parseInt(req.query.userId as string);
+            const userId = req.query.userId as string;
             const matchId = parseInt(req.params.matchId);
             if (userId && matchId) {
                 await this.service.invite(userId, matchId);
@@ -73,7 +73,7 @@ export default class MatchController {
         try {
             // TODO : Call auth service to get user id
 
-            const userId = parseInt(req.body.userId as string);
+            const userId = String(req.body.userId);
             const matchId = parseInt(req.params.matchId);
             if (userId && matchId) {
                 await this.service.acceptInvite(userId, matchId);
@@ -95,7 +95,7 @@ export default class MatchController {
         try {
             // TODO : Call auth service to get user id
 
-            const userId = parseInt(req.body.userId as string);
+            const userId = req.body.userId as string;
             const matchId = parseInt(req.params.matchId);
             if (userId && matchId) {
                 await this.service.declineInvite(userId, matchId);
@@ -116,7 +116,7 @@ export default class MatchController {
         try {
             // TODO : Call auth service to get user id
 
-            const userId = parseInt(req.body.userId as string);
+            const userId = req.body.userId as string;
             const matchId = parseInt(req.params.matchId);
             if (userId && matchId) {
                 await this.service.joinPublicMatch(userId, matchId);

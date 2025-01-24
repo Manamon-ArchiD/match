@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { MatchService } from "../../services";
-import { MatchLimitExceededError, UserAlreadyInMatch, UserAlreadyInvitedError } from "../../errors";
+import { MatchLimitExceededError, UserAlreadyInMatch, UserAlreadyInvitedError, UserNotInvitedError } from "../../errors";
 import { ResponseHelper } from "../../helpers";
 import { StatusCodes } from "../../enums";
 import messages from "../../docs/messages.json";
@@ -53,7 +53,7 @@ export default class MatchController {
             const matchId = parseInt(req.params.matchId);
             if (userId && matchId) {
                 await this.service.invite(userId, matchId);
-                ResponseHelper.send(res, StatusCodes.OK, messages.match.inviteSent);
+                ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.inviteSent);
             } else {
                 ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
             }
@@ -65,6 +65,49 @@ export default class MatchController {
             } 
             else {
                 ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
+            }
+        }
+    }
+
+    static acceptInvite = async (req: Request, res: Response) : Promise<void> => {
+        try {
+            // TODO : Call auth service to get user id
+
+            const userId = parseInt(req.body.userId as string);
+            const matchId = parseInt(req.params.matchId);
+            if (userId && matchId) {
+                await this.service.acceptInvite(userId, matchId);
+                ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.inviteAccepted);
+            } else {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
+            }
+
+        } catch(error) {
+            if (error instanceof UserNotInvitedError) {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.userNotInvited);
+            } else {
+                ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError, error);
+            }
+        }
+    }
+
+    static declineInvite = async (req: Request, res: Response) : Promise<void> => {
+        try {
+            // TODO : Call auth service to get user id
+
+            const userId = parseInt(req.body.userId as string);
+            const matchId = parseInt(req.params.matchId);
+            if (userId && matchId) {
+                await this.service.declineInvite(userId, matchId);
+                ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.inviteDeclined);
+            } else {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
+            }
+        } catch(error) {
+            if (error instanceof UserNotInvitedError) {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.userNotInvited);
+            } else {
+                ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError, error);
             }
         }
     }

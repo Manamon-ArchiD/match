@@ -16,17 +16,14 @@ export class Match extends BaseEntity {
     @Property({ type: 'json', nullable: true })
     pendingInvitations: number[] = [];
 
-
     @Property({ type: 'boolean', nullable: false })
     isPublic: boolean = false;
 
     @Enum({ items: () => MatchStatus, default: MatchStatus.CREATED, nullable: false })
     status: MatchStatus = MatchStatus.CREATED;
 
-
     @Property({ type: 'datetime', nullable: false, defaultRaw: 'now()' })
     createdAt: Date = new Date();
-
 
     @Property({ type: 'datetime', nullable: true })
     finishedAt?: Date;

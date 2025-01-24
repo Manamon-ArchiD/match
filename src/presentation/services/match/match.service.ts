@@ -26,4 +26,12 @@ export default class MatchService {
     async invite(userId : number, matchId : number) : Promise<void> {
         await this.repository.invite(userId, matchId);
     }
+
+    async acceptInvite(userId : number, matchId : number) : Promise<void> {
+        await this.repository.acceptInvite(userId, matchId);
+    }
+
+    async declineInvite(userId : number, matchId : number) : Promise<void> {
+        await this.repository.declineInvite(userId, matchId);
+    }
 };

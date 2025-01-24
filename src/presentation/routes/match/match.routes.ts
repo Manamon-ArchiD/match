@@ -159,59 +159,127 @@ router.post('', MatchController.getAll); // TODO
 
 /**
  * @swagger
- * /api/match/:matchId/invite:
+ * /api/match/{matchId}/invite:
  *   post:
- *     summary: Invite given players to a match using their ID
+ *     summary: Invite a user to a match
  *     tags:
  *       - Match
+ *     parameters:
+ *       - in: path
+ *         name: matchId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the match
+ *       - in: query
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the user to invite
+ *     responses:
+ *       204:
+ *         description: Invitation sent successfully
+ *       400:
+ *         description: User already invited or invalid parameters
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User has already been invited to this match"
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/:matchId/invite', MatchController.invite);
+
+/**
+ * @swagger
+ * /api/match/{matchId}/accept:
+ *   post:
+ *     summary: Accept an invitation to a match
+ *     tags:
+ *       - Match
+ *     parameters:
+ *       - in: path
+ *         name: matchId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the match
  *     requestBody:
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: array
- *             items:
- *               type: string
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *             example:
+ *               userId: 123
  *     responses:
- *       200:
- *         description: Users successfully invited
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               $ref: '#/components/schemas/Match'
- */
-router.post('/:matchId/invite', MatchController.invite); // TODO
-
-/**
- * @swagger
- * /api/match/:matchId/accept:
- *   post:
- *     summary: Accept the invitation to the match in path
- *     tags:
- *       - Match
- *     responses:
- *       200:
+ *       204:
  *         description: Invitation accepted successfully
+ *       400:
+ *         description: User not invited or invalid parameters
  *         content:
  *           application/json:
  *             schema:
  *               type: object
- *               $ref: '#/components/schemas/Match'
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User has not been invited to this match"
+ *       500:
+ *         description: Internal server error
  */
-router.post('/:matchId/accept', MatchController.getAll); // TODO
+router.post('/:matchId/accept', MatchController.acceptInvite);
 
 /**
  * @swagger
- * /api/match/:matchId/decline:
+ * /api/match/{matchId}/decline:
  *   post:
- *     summary: Decline the invitation to the match in path
+ *     summary: Decline an invitation to a match
  *     tags:
  *       - Match
+ *     parameters:
+ *       - in: path
+ *         name: matchId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the match
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *             example:
+ *               userId: 123
  *     responses:
  *       204:
  *         description: Invitation declined successfully
+ *       400:
+ *         description: User not invited or invalid parameters
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User has not been invited to this match"
+ *       500:
+ *         description: Internal server error
  */
-router.post('/:matchId/decline', MatchController.getAll); // TODO
+router.post('/:matchId/decline', MatchController.declineInvite);
 
 /**
  * @swagger

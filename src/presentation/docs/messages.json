@@ -6,7 +6,10 @@
         "matchLimitExceeded": "Match limit exceeded",
         "inviteSent": "Invite sent",
         "userAlreadyInvited": "User already invited",
-        "userAlreadyInMatch": "User already in match"
+        "userAlreadyInMatch": "User already in match",
+        "inviteAccepted": "Invite accepted",
+        "userNotInvited": "User not invited",
+        "inviteDeclined": "Invite declined"
     },
 
     "defaults" : {

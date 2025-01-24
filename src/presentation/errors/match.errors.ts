@@ -15,3 +15,9 @@ export class UserAlreadyInMatch extends Error {
         super("User is already in this match");
     }
 }
+
+export class UserNotInvitedError extends Error {
+    constructor() {
+        super("User has not been invited to this match");
+    }
+}

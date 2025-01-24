@@ -1,5 +1,6 @@
 import { MikroORM } from "@mikro-orm/postgresql";
 import { Match } from "../../../models/match.entity";
+import { MatchNotFoundError } from "../../errors/match.errors";
 
 export default class MatchRepository {
     constructor(
@@ -11,8 +12,11 @@ export default class MatchRepository {
         return matches;
     }
 
-    async getOne(id: number) : Promise<Match | null> {
+    async getOne(id: number) : Promise<Match> {
         const match = await this.em.findOne(Match, {id: id});
+        if (!match){
+            throw new MatchNotFoundError();
+        }
         return match;
     }
 
@@ -28,6 +32,13 @@ export default class MatchRepository {
 
     async createOne(data: Partial<Match>): Promise<Match> {
         const match = this.em.create(Match, data, {partial: true});
+        await this.em.persistAndFlush(match);
+        return match;
+    }
+
+    async updateOne(id: number, updateData: Partial<Match>) {
+        let match: Match = await this.getOne(id);
+        this.em.assign(match, updateData);
         await this.em.persistAndFlush(match);
         return match;
     }

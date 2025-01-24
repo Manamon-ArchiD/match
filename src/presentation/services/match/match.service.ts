@@ -2,6 +2,8 @@ import { MatchLimitExceededError } from "../../../presentation/errors";
 import { Match } from "../../../models/match.entity";
 import { repositories } from "../../repositories";
 import { NewMatchDto } from "../../dto/new-match.dto";
+import { UpdateMatchDto } from "../../dto/update-match.dto";
+import { MatchStatus } from "../../enums";
 
 export default class MatchService {
 
@@ -36,4 +38,16 @@ export default class MatchService {
         }
         return this.repository.createOne(match);
     }
+
+    async updateOne(id: number, data: UpdateMatchDto) {
+        const updateData: Pick<Match, 'status' | 'finishedAt'> = (
+            data.status === MatchStatus.ENDED 
+            ? {status: data.status, finishedAt: new Date()}
+            : {status: data.status}
+        );
+            
+        const match = this.repository.updateOne(id, updateData);
+        return match;
+    }
+
 };

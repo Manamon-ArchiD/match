@@ -92,10 +92,15 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: '#/components/schemas/Match'
+              $ref: '#/components/schemas/UpdateMatchDto'
       responses:
         '200':
           description: Match updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Match'
         '404':
           description: Match not found
     delete:
@@ -242,6 +247,15 @@ components:
         userId:
           type: number
           description: The current user's ID
+    UpdateMatchDto:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - CREATED
+            - PENDING
+            - ENDED
 tags:
   - name: Match
     description: Opérations sur les matchs

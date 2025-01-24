@@ -102,14 +102,19 @@ router.get('/:id', MatchController.getOne)
  *         application/json:
  *           schema:
  *             type: object
- *             $ref: '#/components/schemas/Match'
+ *             $ref: '#/components/schemas/UpdateMatchDto'
  *     responses:
  *       200:
  *         description: Match updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: '#/components/schemas/Match'
  *       404:
  *         description: Match not found
  */
-router.put('/:id', MatchController.getAll) // TODO
+router.put('/:id', MatchController.updateOne)
 
 /**
  * @swagger

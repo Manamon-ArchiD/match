@@ -48,7 +48,7 @@ export class DefaultSeeder extends Seeder {
     em.create(Match, {
       id: 5,
       userIds: [5,6],
-      isPublic: false,
+      isPublic: true,
       pendingInvitations: [],
       status: MatchStatus.ENDED,
       createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),

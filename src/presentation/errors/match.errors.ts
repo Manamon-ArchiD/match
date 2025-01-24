@@ -21,3 +21,9 @@ export class UserNotInvitedError extends Error {
         super("User has not been invited to this match");
     }
 }
+
+export class MatchNotPublicError extends Error {
+    constructor() {
+        super("Match is not public");
+    }
+}

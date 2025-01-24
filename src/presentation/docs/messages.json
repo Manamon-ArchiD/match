@@ -9,7 +9,9 @@
         "userAlreadyInMatch": "User already in match",
         "inviteAccepted": "Invite accepted",
         "userNotInvited": "User not invited",
-        "inviteDeclined": "Invite declined"
+        "inviteDeclined": "Invite declined",
+        "joinPublicMatch": "Joined public match",
+        "matchNotPublic": "Match not public"
     },
 
     "defaults" : {

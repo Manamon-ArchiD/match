@@ -2,5 +2,6 @@ export {
     MatchLimitExceededError,
     UserAlreadyInvitedError,
     UserAlreadyInMatch, 
-    UserNotInvitedError
+    UserNotInvitedError,
+    MatchNotPublicError
 } from './match.errors';

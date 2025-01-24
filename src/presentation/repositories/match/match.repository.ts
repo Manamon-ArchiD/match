@@ -1,6 +1,6 @@
 import { MikroORM } from "@mikro-orm/postgresql";
 import { Match } from "../../../models/match.entity";
-import { UserAlreadyInvitedError, UserAlreadyInMatch, UserNotInvitedError } from "../../errors";
+import { UserAlreadyInvitedError, UserAlreadyInMatch, UserNotInvitedError, MatchNotPublicError } from "../../errors";
 
 export default class MatchRepository {
     constructor(
@@ -58,6 +58,25 @@ export default class MatchRepository {
         }
 
         match.pendingInvitations = match.pendingInvitations.filter((id) => id !== userId);
+        await this.em.persistAndFlush(match);
+    }
+
+    joinPublicMatch = async (userId: number, matchId: number): Promise<void> => {
+        const match = await this.em.findOneOrFail(Match,matchId);
+
+        if (!match.isPublic) {
+            throw new MatchNotPublicError();
+        }
+
+        if (match.userIds.includes(userId)) {
+            throw new UserAlreadyInMatch();
+        }
+
+        if (match.pendingInvitations.includes(userId)) {
+            match.pendingInvitations = match.pendingInvitations.filter((id) => id !== userId);
+        }
+
+        match.userIds.push(userId);
         await this.em.persistAndFlush(match);
     }
 }

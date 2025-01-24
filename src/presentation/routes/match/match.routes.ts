@@ -8,11 +8,11 @@ import { MatchController } from "../../controllers";
  *   description: Opérations sur les matchs
  */
 const router = Router();
+router.use(express.urlencoded({ extended: false }))
 
 router.use('/status', (req, res) => {
     res.status(200).json({ status: 'OK' });
 });
-
 
 /**
  * @swagger
@@ -283,21 +283,63 @@ router.post('/:matchId/decline', MatchController.declineInvite);
 
 /**
  * @swagger
- * /api/match/:matchId/join:
+ * /api/match/{matchId}/join:
  *   post:
- *     summary: Join the public match given in path
+ *     summary: Join a public match by its ID
  *     tags:
  *       - Match
+ *     parameters:
+ *       - in: path
+ *         name: matchId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the match to join
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *                 description: The ID of the user joining the match
+ *             example:
+ *               userId: 123
  *     responses:
- *       200:
- *         description: Match successfully joined
+ *       204:
+ *         description: Successfully joined the public match
+ *       400:
+ *         description: Match is not public or user already in match
+ *         headers:
+ *           X-Status-Message:
+ *             description: Reason for the error
+ *             schema:
+ *               type: string
+ *               example: "Match is not public"
  *         content:
  *           application/json:
  *             schema:
  *               type: object
- *               $ref: '#/components/schemas/Match'
+ *               examples:
+ *                 notPublic:
+ *                   summary: Match is not public
+ *                   value:
+ *                     message: "Match is not public"
+ *                 alreadyInMatch:
+ *                   summary: User already in match
+ *                   value:
+ *                     message: "User is already part of this match"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               example:
+ *                 message: "An unexpected error occurred"
  */
-router.post(':matchId/join', MatchController.getAll); // TODO
+router.post('/:matchId/join', MatchController.joinPublicMatch);
 
-router.use(express.urlencoded({ extended: false }))
 export default router;

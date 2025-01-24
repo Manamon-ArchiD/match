@@ -34,4 +34,8 @@ export default class MatchService {
     async declineInvite(userId : number, matchId : number) : Promise<void> {
         await this.repository.declineInvite(userId, matchId);
     }
+
+    async joinPublicMatch(userId : number, matchId: number) : Promise<void> {
+        await this.repository.joinPublicMatch(userId, matchId);
+    }
 };

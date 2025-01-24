@@ -3,11 +3,15 @@
         "getAll": "Matches retrieved",
         "userMatches": "User matches retrieved",
         "matchDeleted": "Match deleted",
-        "matchLimitExceeded": "Match limit exceeded"
+        "matchLimitExceeded": "Match limit exceeded",
+        "inviteSent": "Invite sent",
+        "userAlreadyInvited": "User already invited",
+        "userAlreadyInMatch": "User already in match"
     },
 
     "defaults" : {
         "badRequest": "Bad Request",
-        "serverError": "Internal Server Error"
+        "serverError": "Internal Server Error",
+        "invalidParams": "Invalid parameters"
     }
 }

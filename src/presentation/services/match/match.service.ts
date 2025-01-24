@@ -1,4 +1,4 @@
-import { MatchLimitExceededError } from "../../../presentation/errors";
+import { MatchLimitExceededError, UserAlreadyInvitedError } from "../../../presentation/errors";
 import { Match } from "../../../models/match.entity";
 import { repositories } from "../../repositories";
 
@@ -21,5 +21,9 @@ export default class MatchService {
 
     async deleteMatch(id : number) : Promise<void> {
         await this.repository.deleteMatch(id);
+    }
+
+    async invite(userId : number, matchId : number) : Promise<void> {
+        await this.repository.invite(userId, matchId);
     }
 };

@@ -180,7 +180,7 @@ router.post('', MatchController.getAll); // TODO
  *               type: object
  *               $ref: '#/components/schemas/Match'
  */
-router.post(':matchId/invite', MatchController.getAll); // TODO
+router.post('/:matchId/invite', MatchController.invite); // TODO
 
 /**
  * @swagger
@@ -198,7 +198,7 @@ router.post(':matchId/invite', MatchController.getAll); // TODO
  *               type: object
  *               $ref: '#/components/schemas/Match'
  */
-router.post(':matchId/accept', MatchController.getAll); // TODO
+router.post('/:matchId/accept', MatchController.getAll); // TODO
 
 /**
  * @swagger
@@ -211,7 +211,7 @@ router.post(':matchId/accept', MatchController.getAll); // TODO
  *       204:
  *         description: Invitation declined successfully
  */
-router.post(':matchId/decline', MatchController.getAll); // TODO
+router.post('/:matchId/decline', MatchController.getAll); // TODO
 
 /**
  * @swagger

@@ -1,29 +1,31 @@
-import { MatchLimitExceededError } from "../../../presentation/errors";
+import { MatchLimitExceededError, UserAlreadyInvitedError } from "../../../presentation/errors";
 import { Match } from "../../../models/match.entity";
 import { repositories } from "../../repositories";
 import { NewMatchDto } from "../../dto/new-match.dto";
-import { UpdateMatchDto } from "../../dto/update-match.dto";
 import { MatchStatus } from "../../enums";
+import { MatchDTO } from "../../dto/match.dto";
+import { UpdateMatchDto } from "../../dto/update-match.dto";
 
 export default class MatchService {
 
     constructor(private repository : repositories.MatchRepository) {}
     
 
-    async getAll() : Promise<Match[]> {
+    async getAll() : Promise<MatchDTO[]> {
         return await this.repository.getAll();
     }
 
-    async getOne(id: number) : Promise<Match | null> {
-        return this.repository.getOne(id);
-    }
-
-    async getUserMatches(userId : number) : Promise<Match[]> {
+    async getUserMatches(userId : number) : Promise<MatchDTO[]> {
         const matches = await this.repository.getUserMatches(userId);
         if (matches.length > 3) {
             throw new MatchLimitExceededError();
         }
         return matches;
+    }
+
+    async getOne(id: number) : Promise<MatchDTO> {
+        const match = await this.repository.getOne(id);
+        return new MatchDTO(match);
     }
 
     async deleteMatch(id : number) : Promise<void> {
@@ -32,10 +34,12 @@ export default class MatchService {
 
     async createOne(data: NewMatchDto) : Promise<Match> {
         const match: Pick<Match, 'pendingInvitations' | 'isPublic' | 'userIds'> = {
-            userIds: [ data.userId ],
-            pendingInvitations: data.invitations,
+            userIds: JSON.stringify([data.userId]),
+            pendingInvitations:  JSON.stringify(data.invitations),
             isPublic: data.public
         }
+
+        console.log(match);
         return this.repository.createOne(match);
     }
 
@@ -50,4 +54,20 @@ export default class MatchService {
         return match;
     }
 
+
+    async invite(userId : string, matchId : number) : Promise<void> {
+        await this.repository.invite(userId, matchId);
+    }
+
+    async acceptInvite(userId : string, matchId : number) : Promise<void> {
+        await this.repository.acceptInvite(userId, matchId);
+    }
+
+    async declineInvite(userId : string, matchId : number) : Promise<void> {
+        await this.repository.declineInvite(userId, matchId);
+    }
+
+    async joinPublicMatch(userId : string, matchId: number) : Promise<void> {
+        await this.repository.joinPublicMatch(userId, matchId);
+    }
 };

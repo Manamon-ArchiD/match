@@ -1,1 +1,8 @@
-export { MatchLimitExceededError } from './match.errors';
+export { 
+    MatchLimitExceededError,
+    UserAlreadyInvitedError,
+    UserAlreadyInMatch, 
+    UserNotInvitedError,
+    MatchNotPublicError,
+    MatchNotFoundError
+} from './match.errors';

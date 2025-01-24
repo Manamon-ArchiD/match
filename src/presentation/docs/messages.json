@@ -4,6 +4,14 @@
         "getOne": "Match retrieved",
         "userMatches": "User matches retrieved",
         "matchDeleted": "Match deleted",
+        "inviteSent": "Invite sent",
+        "userAlreadyInvited": "User already invited",
+        "userAlreadyInMatch": "User already in match",
+        "inviteAccepted": "Invite accepted",
+        "userNotInvited": "User not invited",
+        "inviteDeclined": "Invite declined",
+        "joinPublicMatch": "Joined public match",
+        "matchNotPublic": "Match not public",
         "matchLimitExceeded": "Match limit exceeded",
         "matchNotFound": "No match found for this id",
         "matchCreated": "The match was successfully created",
@@ -12,6 +20,7 @@
 
     "defaults" : {
         "badRequest": "Bad Request",
-        "serverError": "Internal Server Error"
+        "serverError": "Internal Server Error",
+        "invalidParams": "Invalid parameters"
     }
 }

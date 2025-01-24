@@ -1,7 +1,7 @@
 export interface NewMatchDto {
-    invitations:  number[],
+    invitations:  string[],
     public: boolean,
-    userId: number
+    userId: string
 }
 /**
  * @swagger

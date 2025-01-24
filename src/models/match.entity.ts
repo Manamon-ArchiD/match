@@ -7,15 +7,14 @@ import { MatchStatus } from "../presentation/enums";
 @Entity()
 export class Match extends BaseEntity {
 
-    @Property({ type: 'json', nullable: false })
-    userIds! : number[];
+    @Property({ type: 'text', nullable: false })
+    userIds! : string;
 
-    @Property({ type: 'int', nullable: true })
-    winnerId?: number;
+    @Property({ type: 'string', nullable: true })
+    winnerId?: string;
 
-    @Property({ type: 'json', nullable: true })
-    pendingInvitations: number[] = [];
-
+    @Property({ type: 'text', nullable: false })
+    pendingInvitations: string = '[]';
 
     @Property({ type: 'boolean', nullable: false })
     isPublic: boolean = false;
@@ -23,13 +22,27 @@ export class Match extends BaseEntity {
     @Enum({ items: () => MatchStatus, default: MatchStatus.CREATED, nullable: false })
     status: MatchStatus = MatchStatus.CREATED;
 
-
-    @Property({ type: 'datetime', nullable: false, defaultRaw: 'now()' })
+    @Property({ type: 'datetime', nullable: false, defaultRaw: 'CURRENT_TIMESTAMP' })
     createdAt: Date = new Date();
-
 
     @Property({ type: 'datetime', nullable: true })
     finishedAt?: Date;
+
+    getUserIds(): string[] {
+        return JSON.parse(this.userIds);
+    }
+
+    setUserIds(userIds: string[]): void {
+        this.userIds = JSON.stringify(userIds);
+    }
+
+    getPendingInvitations(): string[] {
+        return JSON.parse(this.pendingInvitations);
+    }
+
+    setPendingInvitations(pendingInvitations: string[]): void {
+        this.pendingInvitations = JSON.stringify(pendingInvitations);
+    }
 }
 
 /**
@@ -45,17 +58,17 @@ export class Match extends BaseEntity {
  *         userIds:
  *           type: array
  *           items:
- *             type: number
- *           description: List of user IDs associated with the match
+ *             type: string
+ *           description: List of user IDs associated with the match (stored as a JSON array)
  *         winnerId:
- *           type: number
+ *           type: string
  *           nullable: true
  *           description: The ID of the winner if the match is finished
  *         pendingInvitations:
  *           type: array
  *           items:
- *             type: number
- *           description: List of user IDs who have pending invitations to join the match
+ *             type: string
+ *           description: List of user IDs who have pending invitations to join the match (stored as a JSON array)
  *         isPublic:
  *           type: boolean
  *           description: Indicates if the match is public
@@ -83,12 +96,11 @@ export class Match extends BaseEntity {
  *         - createdAt
  *       example:
  *         id: 1
- *         userIds: [1, 2, 3]
- *         winnerId: 2
- *         pendingInvitations: [4]
+ *         userIds: ["1", "2", "3"]
+ *         winnerId: "2"
+ *         pendingInvitations: ["4"]
  *         isPublic: true
  *         status: "PENDING"
  *         createdAt: "2025-01-24T12:00:00Z"
  *         finishedAt: "2025-01-25T14:30:00Z"
  */
-

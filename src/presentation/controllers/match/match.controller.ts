@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { MatchService } from "../../services";
-import { MatchLimitExceededError } from "../../errors";
+import { MatchLimitExceededError, MatchNotPublicError, UserAlreadyInMatch, UserAlreadyInvitedError, UserNotInvitedError } from "../../errors";
 import { ResponseHelper } from "../../helpers";
 import { MatchStatus, StatusCodes } from "../../enums";
 import messages from "../../docs/messages.json";
 import { NewMatchDto } from "../../dto/new-match.dto";
-import { UpdateMatchDto } from "../../dto/update-match.dto";
 import { MatchNotFoundError } from "../../errors/match.errors";
+import { UpdateMatchDto } from "../../dto/update-match.dto";
 
 export default class MatchController {
 
@@ -51,18 +51,16 @@ export default class MatchController {
     }
 
     static getOne = async (req: Request, res: Response) : Promise<void> => {
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id as string);
         if (id) {
             try {
                 const match = await this.service.getOne(id);
-                if (match) {
-                    ResponseHelper.send(res, StatusCodes.OK, messages.match.getOne, match);
-                }
-                else {
-                    ResponseHelper.send(res, StatusCodes.NOT_FOUND, messages.match.matchNotFound)
+                ResponseHelper.send(res, StatusCodes.OK, messages.match.getOne, match);
+            } catch (error) {
+                if (error instanceof MatchNotFoundError) {
+                    ResponseHelper.send(res, StatusCodes.NOT_FOUND, messages.match.matchNotFound);
                 }
 
-            } catch (error) {
                 ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
             }
         }
@@ -99,6 +97,94 @@ export default class MatchController {
             }
             console.error(error);
             ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
+        }
+    }
+
+    static invite = async (req: Request, res: Response) : Promise<void> => {
+        try {
+            const userId = req.query.userId as string;
+            const matchId = parseInt(req.params.matchId);
+            if (userId && matchId) {
+                await this.service.invite(userId, matchId);
+                ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.inviteSent);
+            } else {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
+            }
+        } catch (error) {
+            if (error instanceof UserAlreadyInvitedError) {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.userAlreadyInvited);
+            } else if (error instanceof UserAlreadyInMatch) {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.userAlreadyInMatch);
+            } 
+            else {
+                ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
+            }
+        }
+    }
+
+    static acceptInvite = async (req: Request, res: Response) : Promise<void> => {
+        try {
+            // TODO : Call auth service to get user id
+
+            const userId = String(req.body.userId);
+            const matchId = parseInt(req.params.matchId);
+            if (userId && matchId) {
+                await this.service.acceptInvite(userId, matchId);
+                ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.inviteAccepted);
+            } else {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
+            }
+
+        } catch(error) {
+            if (error instanceof UserNotInvitedError) {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.userNotInvited);
+            } else {
+                ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError, error);
+            }
+        }
+    }
+
+    static declineInvite = async (req: Request, res: Response) : Promise<void> => {
+        try {
+            // TODO : Call auth service to get user id
+
+            const userId = req.body.userId as string;
+            const matchId = parseInt(req.params.matchId);
+            if (userId && matchId) {
+                await this.service.declineInvite(userId, matchId);
+                ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.inviteDeclined);
+            } else {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
+            }
+        } catch(error) {
+            if (error instanceof UserNotInvitedError) {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.userNotInvited);
+            } else {
+                ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError, error);
+            }
+        }
+    }
+
+    static joinPublicMatch = async (req: Request, res: Response) : Promise<void> => {
+        try {
+            // TODO : Call auth service to get user id
+
+            const userId = req.body.userId as string;
+            const matchId = parseInt(req.params.matchId);
+            if (userId && matchId) {
+                await this.service.joinPublicMatch(userId, matchId);
+                ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.joinPublicMatch);
+            } else {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
+            }
+        } catch(error) {
+            if (error instanceof MatchNotPublicError) {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.matchNotPublic);
+            } else if (error instanceof UserAlreadyInMatch) {
+                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.userAlreadyInMatch);
+            } else {
+                ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError, error);
+            }
         }
     }
 }

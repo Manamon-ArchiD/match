@@ -8,27 +8,27 @@ export class TestSeeder extends Seeder {
     async run(em: EntityManager): Promise<void> {
         em.create(Match, {
             id: 1,
-            userIds: [1],
+            userIds: JSON.stringify([1]),
             isPublic: false,
-            pendingInvitations: [],
+            pendingInvitations: JSON.stringify([]),
             status: MatchStatus.CREATED,
             createdAt: new Date()
         });
 
         em.create(Match, {
             id: 2,
-            userIds: [1],
+            userIds: JSON.stringify([1]),
             isPublic: false,
-            pendingInvitations: [],
+            pendingInvitations: JSON.stringify([]),
             status: MatchStatus.CREATED,
             createdAt: new Date()
         });
 
         em.create(Match, {
             id: 3,
-            userIds: [2],
+            userIds: JSON.stringify([2]),
             isPublic: false,
-            pendingInvitations: [],
+            pendingInvitations: JSON.stringify([]),
             status: MatchStatus.PENDING,
             createdAt: new Date()
         });

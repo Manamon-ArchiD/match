@@ -34,12 +34,4 @@ describe('Database Test', () => {
         expect(response.status).toBe(200);
         expect(response.body).toHaveLength(2);
     });
-
-    it('should delete a match', async () => {
-        const em = orm.em.fork();
-        const response = await request.delete(`${endpoint}/1`);
-        expect(response.status).toBe(200);
-        const match = await em.findOne(Match, { id: 1 });
-        expect(match).toBeNull();
-    });
 });

@@ -4,9 +4,7 @@ import { Match } from "../../../models/match.entity";
 export default class MatchRepository {
     constructor(
         private readonly em: MikroORM['em'],
-    ) {
-        console.log("MatchRepository created");
-    }
+    ) {}
 
     getAll = async (): Promise<Match[]> => {
         const matches = await this.em.findAll(Match);
@@ -19,7 +17,7 @@ export default class MatchRepository {
     }
 
     getUserMatches = async (userId: number): Promise<Match[]> => {
-        const matches = await this.em.find(Match, { userId: userId });
+        const matches = await this.em.find(Match, { userIds: { $contains: [userId] } });
         return matches;
     }
 

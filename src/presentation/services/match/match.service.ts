@@ -4,9 +4,7 @@ import { repositories } from "../../repositories";
 
 export default class MatchService {
 
-    constructor(private repository : repositories.MatchRepository) {
-        console.log("MatchService created");
-    }
+    constructor(private repository : repositories.MatchRepository) {}
     
 
     async getAll() : Promise<Match[]> {

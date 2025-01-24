@@ -17,6 +17,8 @@ export const options = {
         `./src/presentation/routes/**/*.ts`,
         "./dist/presentation/routes/**/*.js",
         `./src/models/*.ts`,
-        "./dist/models/*.js"
+        "./dist/models/*.js",
+        `./src/presentation/dto/**/*.ts`,
+        `./dist/presentation/dto/**/*.js`
     ],
 };

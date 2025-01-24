@@ -4,6 +4,7 @@ import { MatchLimitExceededError } from "../../errors";
 import { ResponseHelper } from "../../helpers";
 import { StatusCodes } from "../../enums";
 import messages from "../../docs/messages.json";
+import { NewMatchDto } from "../../dto/new-match.dto";
 
 export default class MatchController {
 
@@ -68,10 +69,12 @@ export default class MatchController {
 
     static createOne = async (req: Request, res: Response) : Promise<void> => {
         try {
-            const match = await this.service.createOne()
+            const data = req.body as NewMatchDto;
+            const match = await this.service.createOne(data);
             ResponseHelper.send(res, StatusCodes.OK, messages.match.matchCreated, match);
         } catch (error) {
+            console.error(error);
             ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);
         }
-    } 
+    }
 }

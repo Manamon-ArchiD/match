@@ -1,6 +1,7 @@
 import { MatchLimitExceededError } from "../../../presentation/errors";
 import { Match } from "../../../models/match.entity";
 import { repositories } from "../../repositories";
+import { NewMatchDto } from "../../dto/new-match.dto";
 
 export default class MatchService {
 
@@ -27,7 +28,12 @@ export default class MatchService {
         await this.repository.deleteMatch(id);
     }
 
-    createOne() : Promise<Match> {
-        throw new Error("Method not implemented.");
+    async createOne(data: NewMatchDto) : Promise<Match> {
+        const match: Pick<Match, 'pendingInvitations' | 'isPublic' | 'userIds'> = {
+            userIds: [ data.userId ],
+            pendingInvitations: data.invitations,
+            isPublic: data.public
+        }
+        return this.repository.createOne(match);
     }
 };

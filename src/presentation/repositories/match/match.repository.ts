@@ -25,4 +25,10 @@ export default class MatchRepository {
         const match = await this.em.findOneOrFail(Match, id);
         await this.em.removeAndFlush(match);
     }
+
+    async createOne(data: Partial<Match>): Promise<Match> {
+        const match = this.em.create(Match, data, {partial: true});
+        await this.em.persistAndFlush(match);
+        return match;
+    }
 }

@@ -145,7 +145,7 @@ router.delete('/:id', MatchController.deleteMatch)
  *         application/json:
  *           schema:
  *             type: object
- *             $ref: '#/components/schemas/Match'
+ *             $ref: '#/components/schemas/NewMatchDto'
  *     responses:
  *       201:
  *         description: The match was successfully created

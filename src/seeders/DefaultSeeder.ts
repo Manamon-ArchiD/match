@@ -14,7 +14,6 @@ export class DefaultSeeder extends Seeder {
     }
     
     em.create(Match, {
-      id: 1,
       userIds: [1,2],
       isPublic: false,
       pendingInvitations: [],
@@ -22,7 +21,6 @@ export class DefaultSeeder extends Seeder {
       createdAt: new Date()
     })
     em.create(Match, {
-      id: 2,
       userIds: [1,3],
       isPublic: false,
       pendingInvitations: [],
@@ -30,7 +28,6 @@ export class DefaultSeeder extends Seeder {
       createdAt: new Date()
     })
     em.create(Match, {
-      id: 3,
       userIds: [3,1],
       isPublic: false,
       pendingInvitations: [],
@@ -38,7 +35,6 @@ export class DefaultSeeder extends Seeder {
       createdAt: new Date()
     })
     em.create(Match, {
-      id: 4,
       userIds: [4,5],
       isPublic: false,
       pendingInvitations: [],
@@ -46,7 +42,6 @@ export class DefaultSeeder extends Seeder {
       createdAt: new Date()
     })
     em.create(Match, {
-      id: 5,
       userIds: [5,6],
       isPublic: false,
       pendingInvitations: [],

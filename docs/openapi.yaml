@@ -119,60 +119,171 @@ paths:
           description: Match deleted
         '404':
           description: Match not found
-  /api/match/:matchId/invite:
+  /api/match/{matchId}/invite:
     post:
-      summary: Invite given players to a match using their ID
+      summary: Invite a user to a match
       tags:
         - Match
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: ID of the user to invite
+      responses:
+        '204':
+          description: Invitation sent successfully
+        '400':
+          description: User already invited or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User has already been invited to this match
+        '500':
+          description: Internal server error
+  /api/match/{matchId}/accept:
+    post:
+      summary: Accept an invitation to a match
+      tags:
+        - Match
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                type: string
+              type: object
+              properties:
+                userId:
+                  type: integer
+              example:
+                userId: 123
       responses:
-        '200':
-          description: Users successfully invited
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: '#/components/schemas/Match'
-  /api/match/:matchId/accept:
-    post:
-      summary: Accept the invitation to the match in path
-      tags:
-        - Match
-      responses:
-        '200':
+        '204':
           description: Invitation accepted successfully
+        '400':
+          description: User not invited or invalid parameters
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Match'
-  /api/match/:matchId/decline:
+                properties:
+                  message:
+                    type: string
+                    example: User has not been invited to this match
+        '500':
+          description: Internal server error
+  /api/match/{matchId}/decline:
     post:
-      summary: Decline the invitation to the match in path
+      summary: Decline an invitation to a match
       tags:
         - Match
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+              example:
+                userId: 123
       responses:
         '204':
           description: Invitation declined successfully
-  /api/match/:matchId/join:
-    post:
-      summary: Join the public match given in path
-      tags:
-        - Match
-      responses:
-        '200':
-          description: Match successfully joined
+        '400':
+          description: User not invited or invalid parameters
           content:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/Match'
+                properties:
+                  message:
+                    type: string
+                    example: User has not been invited to this match
+        '500':
+          description: Internal server error
+  /api/match/{matchId}/join:
+    post:
+      summary: Join a public match by its ID
+      tags:
+        - Match
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          schema:
+            type: integer
+          description: The ID of the match to join
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  description: The ID of the user joining the match
+              example:
+                userId: 123
+      responses:
+        '204':
+          description: Successfully joined the public match
+        '400':
+          description: Match is not public or user already in match
+          headers:
+            X-Status-Message:
+              description: Reason for the error
+              schema:
+                type: string
+                example: Match is not public
+          content:
+            application/json:
+              schema:
+                type: object
+                examples:
+                  notPublic:
+                    summary: Match is not public
+                    value:
+                      message: Match is not public
+                  alreadyInMatch:
+                    summary: User already in match
+                    value:
+                      message: User is already part of this match
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: An unexpected error occurred
 components:
   schemas:
     Match:
@@ -184,17 +295,19 @@ components:
         userIds:
           type: array
           items:
-            type: number
-          description: List of user IDs associated with the match
+            type: string
+          description: List of user IDs associated with the match (stored as a JSON array)
         winnerId:
-          type: number
+          type: string
           nullable: true
           description: The ID of the winner if the match is finished
         pendingInvitations:
           type: array
           items:
-            type: number
-          description: List of user IDs who have pending invitations to join the match
+            type: string
+          description: >-
+            List of user IDs who have pending invitations to join the match
+            (stored as a JSON array)
         isPublic:
           type: boolean
           description: Indicates if the match is public
@@ -223,12 +336,12 @@ components:
       example:
         id: 1
         userIds:
-          - 1
-          - 2
-          - 3
-        winnerId: 2
+          - '1'
+          - '2'
+          - '3'
+        winnerId: '2'
         pendingInvitations:
-          - 4
+          - '4'
         isPublic: true
         status: PENDING
         createdAt: '2025-01-24T12:00:00Z'

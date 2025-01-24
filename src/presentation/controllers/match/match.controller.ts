@@ -71,7 +71,7 @@ export default class MatchController {
         const data = req.body as NewMatchDto;
         try {
             const match = await this.service.createOne(data);
-            ResponseHelper.send(res, StatusCodes.OK, messages.match.matchCreated, match);
+            ResponseHelper.send(res, StatusCodes.CREATED, messages.match.matchCreated, match);
         } catch (error) {
             console.error(error);
             ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError);

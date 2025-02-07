@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { MatchService } from "../../services";
 import { MatchLimitExceededError, MatchNotPublicError, UserAlreadyInMatch, UserAlreadyInvitedError, UserNotInvitedError } from "../../errors";
-import { ResponseHelper } from "../../helpers";
+import { JwtHelper, ResponseHelper } from "../../helpers";
 import { MatchStatus, StatusCodes } from "../../enums";
 import messages from "../../docs/messages.json";
 import { NewMatchDto } from "../../dto/new-match.dto";
 import { MatchNotFoundError } from "../../errors/match.errors";
 import { UpdateMatchDto } from "../../dto/update-match.dto";
+import { UserAuthDTO } from "../../dto/user-auth.dto";
 
 export default class MatchController {
 
@@ -124,34 +125,42 @@ export default class MatchController {
 
     static acceptInvite = async (req: Request, res: Response) : Promise<void> => {
         try {
-            // TODO : Call auth service to get user id
+            const authHeader = req.headers['authorization'];
+            if (!authHeader) {
+                return ResponseHelper.send(res, 401, 'Invalid Token');
+            }
+            const token = authHeader.split(' ')[1];
+            const { id }  = await JwtHelper.verifyToken(token);
 
-            const userId = String(req.body.userId);
             const matchId = parseInt(req.params.matchId);
-            if (userId && matchId) {
-                await this.service.acceptInvite(userId, matchId);
-                ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.inviteAccepted);
+            if (id && matchId) {
+                await this.service.acceptInvite(id, matchId);
+                return ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.inviteAccepted);
             } else {
-                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
+                return ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
             }
 
         } catch(error) {
             if (error instanceof UserNotInvitedError) {
-                ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.userNotInvited);
+                return ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.match.userNotInvited);
             } else {
-                ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError, error);
+                return ResponseHelper.send(res, StatusCodes.INTERNAL_SERVER_ERROR, messages.defaults.serverError, error);
             }
         }
     }
 
     static declineInvite = async (req: Request, res: Response) : Promise<void> => {
         try {
-            // TODO : Call auth service to get user id
+            const authHeader = req.headers['authorization'];
+            if (!authHeader) {
+                return ResponseHelper.send(res, 401, 'Invalid Token');
+            }
+            const token = authHeader.split(' ')[1];
+            const { id }  = await JwtHelper.verifyToken(token);
 
-            const userId = req.body.userId as string;
             const matchId = parseInt(req.params.matchId);
-            if (userId && matchId) {
-                await this.service.declineInvite(userId, matchId);
+            if (id && matchId) {
+                await this.service.declineInvite(id, matchId);
                 ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.inviteDeclined);
             } else {
                 ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
@@ -167,12 +176,16 @@ export default class MatchController {
 
     static joinPublicMatch = async (req: Request, res: Response) : Promise<void> => {
         try {
-            // TODO : Call auth service to get user id
+            const authHeader = req.headers['authorization'];
+            if (!authHeader) {
+                return ResponseHelper.send(res, 401, 'Invalid Token');
+            }
+            const token = authHeader.split(' ')[1];
+            const { id }  = await JwtHelper.verifyToken(token);
 
-            const userId = req.body.userId as string;
             const matchId = parseInt(req.params.matchId);
-            if (userId && matchId) {
-                await this.service.joinPublicMatch(userId, matchId);
+            if (id && matchId) {
+                await this.service.joinPublicMatch(id, matchId);
                 ResponseHelper.send(res, StatusCodes.NO_CONTENT, messages.match.joinPublicMatch);
             } else {
                 ResponseHelper.send(res, StatusCodes.BAD_REQUEST, messages.defaults.invalidParams);
